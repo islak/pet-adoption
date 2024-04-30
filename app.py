@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import text
@@ -61,7 +61,7 @@ def populate_database():
 
 @app.route('/')
 def index():
-    return 'Welcome to Pet Adoption Marketplace API!'
+    return send_from_directory('frontend/public', 'index.html')
 
 @app.route('/test_database_connection')
 def test_database_connection():
