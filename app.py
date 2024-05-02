@@ -1,7 +1,8 @@
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, send_from_directory, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import text
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@localhost:5432/pet_adoption_db'
@@ -63,6 +64,16 @@ def populate_database():
 def index():
     return send_from_directory('frontend/public', 'index.html')
 
+# Add route to serve static files from the frontend/build directory
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists("frontend/build/" + path):
+        return send_from_directory('frontend/build', path)
+    else:
+        return send_from_directory('frontend/build', 'index.html')
+
+
 @app.route('/test_database_connection')
 def test_database_connection():
     try:
@@ -88,6 +99,32 @@ def get_pet(id):
         return jsonify(pet.serialize())
     else:
         return jsonify({'error': 'Pet not found'}), 404
+
+
+
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    return jsonify({'users': [user.username for user in users]})
+
+@app.route('/users', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    new_user = User(username=username, email=email, password=password)
+    db.session.add(new_user)
+
+    try:
+        # Commit the session 
+        db.session.commit()
+        return jsonify({'message': 'User created successfully!'})
+    except Exception as e:
+        # Rollback the session if an error occurs
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/pets/<int:id>/adopt', methods=['POST'])
 def adopt_pet(id):
