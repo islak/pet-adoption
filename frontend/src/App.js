@@ -9,7 +9,8 @@ function App() {
 
         <h1>Hello, Pet Adoption Marketplace!</h1>
         <p>Welcome to the world of pet adoption!</p>
-
+        <p>Welcome to the world of pet adoption!</p>
+      
     </div>
   );
 }

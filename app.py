@@ -60,19 +60,21 @@ def populate_database():
             print(f"Error populating database: {e}")
 
 
-@app.route('/')
-def index():
-    return send_from_directory('frontend/public', 'index.html')
+# Route to serve the bundled JavaScript file
+@app.route('/static/js/main.2ad4bdc1.js')
+def serve_bundle_js():
+    return send_from_directory('frontend/build/static/js', 'main.2ad4bdc1.js')
 
-# Add route to serve static files from the frontend/build directory
+# Route to serve other static files (like CSS, images, etc.)
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory('frontend/build/static', filename)
+
+# Route to serve index.html for all other routes
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def serve(path):
-    if path != "" and os.path.exists("frontend/build/" + path):
-        return send_from_directory('frontend/build', path)
-    else:
-        return send_from_directory('frontend/build', 'index.html')
-
+def serve_index(path):
+    return send_from_directory('frontend/build', 'index.html')
 
 @app.route('/test_database_connection')
 def test_database_connection():
