@@ -61,9 +61,9 @@ def populate_database():
 
 
 # Route to serve the bundled JavaScript file
-@app.route('/static/js/main.65841cb2.js')
+@app.route('/static/js/main.3172d588.js')
 def serve_bundle_js():
-    return send_from_directory('frontend/build/static/js', 'main.65841cb2.js')
+    return send_from_directory('frontend/build/static/js', 'main.3172d588.js')
 
 # Route to serve other static files (like CSS, images, etc.)
 @app.route('/static/css/main.e2e89c21.css')

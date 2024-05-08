@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css'; // Import CSS file for styling
+import PetList from './PetList'; // Import the PetList component
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
           <h2>About Us</h2>
           <p>We are dedicated to helping pets find loving homes.</p>
         </section>
+        {/* Render the PetList component to display pets */}
+        <PetList />
       </main>
       <footer>
         <p>&copy; 2024 Pet Adoption Marketplace</p>
