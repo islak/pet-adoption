@@ -2,7 +2,7 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
+  font-family: 'Comic Sans MS', cursive; /* Fun and playful font */
 }
 
 header {
@@ -11,14 +11,14 @@ header {
 }
 
 .hero {
-  background-color: #f0f0f0;
+  background-color: #ffe0f6; /* Light pink */
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
 }
 
 .about {
-  background-color: #e0e0e0;
+  background-color: #c9f7e9; /* Light green */
   padding: 20px;
   border-radius: 10px;
 }

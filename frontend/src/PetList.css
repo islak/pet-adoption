@@ -1,0 +1,47 @@
+/* PetList.css */
+
+.pet-list {
+    margin-top: 20px;
+  }
+  
+  .pet-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #f0f0f0; /* Light pink border */
+    border-radius: 5px;
+    background-color: #ffe0f6; /* Light pink background */
+  }
+  
+  .pet-photo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+  
+  .pet-details {
+    flex: 1;
+  }
+  
+  .pet-details h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+  
+  .pet-details p {
+    margin: 5px 0;
+  }
+  
+  .pet-details strong {
+    font-weight: bold;
+  }
+  
+  /* Optional: Add hover effect */
+  .pet-item:hover {
+    background-color: #f0f0f0; /* Light gray on hover */
+    cursor: pointer;
+  }
+  

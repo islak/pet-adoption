@@ -61,14 +61,14 @@ def populate_database():
 
 
 # Route to serve the bundled JavaScript file
-@app.route('/static/js/main.3172d588.js')
+@app.route('/static/js/main.5cd38bed.js')
 def serve_bundle_js():
-    return send_from_directory('frontend/build/static/js', 'main.3172d588.js')
+    return send_from_directory('frontend/build/static/js', 'main.5cd38bed.js')
 
 # Route to serve other static files (like CSS, images, etc.)
-@app.route('/static/css/main.e2e89c21.css')
+@app.route('/static/css/main.9518e7a7.css')
 def serve_static():
-    return send_from_directory('frontend/build/static/css', 'main.e2e89c21.css')
+    return send_from_directory('frontend/build/static/css', 'main.9518e7a7.css')
 
 # Route to serve index.html for all other routes
 @app.route('/', defaults={'path': ''})
