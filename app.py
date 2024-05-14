@@ -15,6 +15,8 @@ class Pet(db.Model):
     name = db.Column(db.String(100), nullable=False)
     breed = db.Column(db.String(100), nullable=False)
     age = db.Column(db.Integer)
+    gender = db.Column(db.String(10))  # Add gender column
+    weight = db.Column(db.String(10))  # Add weight column
     description = db.Column(db.Text)
     photo_url = db.Column(db.String(255))
     adopted = db.Column(db.Boolean, default=False)
@@ -25,6 +27,8 @@ class Pet(db.Model):
             'name': self.name,
             'breed': self.breed,
             'age': self.age,
+            'gender': self.gender,
+            'weight': self.weight,
             'description': self.description,
             'photo_url': self.photo_url
         }
@@ -44,8 +48,8 @@ def populate_database():
         
         # Create some sample pet records
         pets = [
-            Pet(name='Buddy', breed='Golden Retriever', age=3, description='Friendly and playful', photo_url='https://example.com/buddy.jpg'),
-            Pet(name='Max', breed='Labrador', age=2, description='Energetic and loyal', photo_url='https://example.com/max.jpg')
+            Pet(name='Buddy', breed='Golden Retriever', age=3, gender='Male', weight='Large', description='Friendly and playful', photo_url='https://example.com/buddy.jpg'),
+            Pet(name='Max', breed='labrador', age=2, gender='Male', weight='Medium', description='Energetic and loyal', photo_url='https://example.com/max.jpg')
         ]
         
         # Add pets to the session
@@ -61,9 +65,9 @@ def populate_database():
 
 
 # Route to serve the bundled JavaScript file
-@app.route('/static/js/main.5cd38bed.js')
+@app.route('/static/js/main.105bcbb8.js')
 def serve_bundle_js():
-    return send_from_directory('frontend/build/static/js', 'main.5cd38bed.js')
+    return send_from_directory('frontend/build/static/js', 'main.105bcbb8.js')
 
 # Route to serve other static files (like CSS, images, etc.)
 @app.route('/static/css/main.9518e7a7.css')
@@ -86,11 +90,38 @@ def test_database_connection():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/pets')
-def get_pets():
-    # Retrieve all pets from the database
-    pets = Pet.query.all()
+@app.route('/pets')
+def get_filtered_pets():
+    # Retrieve filter parameters from the request query string
+    breed = request.args.get('breed')
+    age = request.args.get('age')
+    gender = request.args.get('gender')
+    weight = request.args.get('weight')
+
+    # Construct the base query to retrieve pets
+    query = Pet.query
+
+    # Apply filters based on provided criteria
+    if breed and breed != 'all':
+        query = query.filter_by(breed=breed)
+    if age and age != 'all':
+        if age == 'puppy':
+            query = query.filter(Pet.age <= 2)  # Assuming puppies are <= 2 years old
+        elif age == 'senior':
+            query = query.filter(Pet.age >= 8)  # Assuming seniors are >= 8 years old
+        elif age == 'adult':
+            query = query.filter(Pet.age.between(3, 7))  # Assuming adults are between 3 and 7 years old
+    if gender and gender != 'all':
+        query = query.filter_by(gender=gender)
+    if weight and weight != 'all':
+        query = query.filter_by(weight=weight)
+
+    # Execute the query and retrieve filtered pets
+    pets = query.all()
+
     # Serialize pets to JSON and return
     return jsonify({'pets': [pet.serialize() for pet in pets]})
+
 
 @app.route('/pets/<int:id>')
 def get_pet(id):
@@ -101,8 +132,6 @@ def get_pet(id):
         return jsonify(pet.serialize())
     else:
         return jsonify({'error': 'Pet not found'}), 404
-
-
 
 @app.route('/users', methods=['GET'])
 def get_users():

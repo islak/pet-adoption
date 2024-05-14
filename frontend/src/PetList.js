@@ -3,19 +3,38 @@ import axios from 'axios';
 import { Grid, Card, CardMedia, CardContent, Typography } from '@mui/material';
 import './PetList.css'; 
 
-function PetList() {
+function PetList({ breed, age, gender, weight }) {
   const [pets, setPets] = useState([]);
 
   useEffect(() => {
-    // Fetch pets from the backend when the component mounts
-    axios.get('/pets')
+    // Construct the API URL with filter parameters
+    let apiUrl = '/pets';
+    let params = [];
+    if (breed && breed !== 'all') {
+      params.push(`breed=${breed}`);
+    }
+    if (age && age !== 'all') {
+      params.push(`age=${age}`);
+    }
+    if (gender && gender !== 'all') {
+      params.push(`gender=${gender}`);
+    }
+    if (weight && weight !== 'all') {
+      params.push(`weight=${weight}`);
+    }
+    if (params.length > 0) {
+      apiUrl += `?${params.join('&')}`;
+    }
+
+    // Fetch pets from the backend API with filter parameters
+    axios.get(apiUrl)
       .then(response => {
         setPets(response.data.pets);
       })
       .catch(error => {
         console.error('Error fetching pets:', error);
       });
-  }, []);
+  }, [breed, age, gender, weight]);
 
   return (
     <div className="pet-list">
